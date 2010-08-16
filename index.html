@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+		</style>
+	</head>
+	<body>
+		<canvas width="200" height="300" id="paint_area">
+			<img id="treble" src="http://library.thinkquest.org/10764/ThinkQuest/cave1/images/treble.gif" />
+			<img id="bass" src="http://www.clipart.clipartist.net/clipartist.net/openclipart/art/bass_clef_xxl.png" />
+		</canvas>
+		<script>
+			var ctx = document.getElementById('paint_area').getContext('2d');
+
+			ctx.fillStyle = '#EEEEEE';
+			ctx.fillRect(0,0,500,500);
+
+			for (var y = 25.5; y < 150; y += 25) {
+				ctx.moveTo(0, y);
+				ctx.lineTo(375, y);
+			}
+			ctx.strokeStyle = "#333";
+			ctx.stroke();
+
+			ctx.beginPath();
+			//ctx.arc(/*x*/150, /*y*/50, 15, 0, Math.PI * 2, false);
+			// radius, startAngle, endAngle, anticlockwise
+			var constPI = Math.PI * 2;
+
+			var notes = [
+				{"x":150,"y":25,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"F", "base":"A"},
+				{"x":150,"y":38,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"E", "base":"G"},
+				{"x":150,"y":50,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"D", "base":"F"},
+				{"x":150,"y":63,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"C", "base":"E"},
+				{"x":150,"y":75,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"B", "base":"D"},
+				{"x":150,"y":88,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"A", "base":"C"},
+				{"x":150,"y":100,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"G", "base":"B"},
+				{"x":150,"y":113,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"F", "base":"A"},
+				{"x":150,"y":125,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"E", "base":"G"}
+			];
+
+			var note = notes[(Math.floor(Math.random() * notes.length))];
+			ctx.arc(note["x"], note["y"], note["r"], note["sA"], note["eA"], note["acw"]);
+			ctx.closePath();
+			ctx.strokeStyle = "#000";
+			ctx.stroke();
+			ctx.fillStyle = "#000";
+			ctx.fill();
+
+
+			var treble = document.getElementById("treble");
+			ctx.drawImage(treble, 10, 0, 50, 175);
+
+			var bass = document.getElementById("bass");
+			//ctx.drawImage(bass, 10, 25, 60, 87);
+
+			/* this is only for mouse interaction */
+			var down = false;
+			ctx.canvas.addEventListener('mousedown', function() { down = true; }, false);
+			ctx.canvas.addEventListener('mouseup', function() { down = false; }, false);
+			ctx.canvas.addEventListener('mousemove', function(event) {
+				if (down) {
+					ctx.translate(0,-50);
+					ctx.drawImage(img_buffer, event.clientX - this.offsetLeft,
+					event.clientY - this.offsetTop,100,100);
+					ctx.translate(0,50);
+				}
+			}, false);
+		</script>
+
+	<!-- http://diveintohtml5.org/canvas.html#divingin -->
+	<!-- http://playground.html5rocks.com/#canvas_tag -->
+	</body>
+</html>
