@@ -17,19 +17,15 @@
 			ctx.fillRect(0,0,500,500);
 
 			//make the clef lines
-			for (var y = 75.5; y < 200; y += 25) {
-				ctx.moveTo(0, y);
-				ctx.lineTo(375, y);
-			}
-			//Make special partial lines for top outer notes
-			for (var y = 25.5; y < 100; y += 25) {
-				ctx.moveTo(120, y);
-				ctx.lineTo(180, y);
-			}
-			//Make special partial lines for bottom outer notes
-			for (var y = 200.5; y < 250; y += 25) {
-				ctx.moveTo(120, y);
-				ctx.lineTo(180, y);
+			for (var y = 25.5, l = 1; y < 250; y += 25, l++) {
+				//account for outer lines
+				if(l < 3 || l > 7){
+					ctx.moveTo(120, y);
+					ctx.lineTo(180, y);
+				}else{
+					ctx.moveTo(0, y);
+					ctx.lineTo(375, y);
+				}
 			}
 			ctx.strokeStyle = "#333";
 			ctx.stroke();
