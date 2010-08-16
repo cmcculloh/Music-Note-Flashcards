@@ -20,6 +20,7 @@
 			for (var y = 25.5, l = 1; y < 250; y += 25, l++) {
 				//account for outer lines
 				if(l < 3 || l > 7){
+					//we only want these lines to be long enough to hold the note. They shouldn't stretch across the whole screen
 					ctx.moveTo(120, y);
 					ctx.lineTo(180, y);
 				}else{
@@ -38,25 +39,25 @@
 
 			//generate one note for each line/space and then determine what note it is dependant upon with clef it is on
 			var notes = [
-				{"x":150,"y":13,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"D", "base":"F"},
-				{"x":150,"y":25,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"C", "base":"E"},
-				{"x":150,"y":38,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"B", "base":"D"},
-				{"x":150,"y":50,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"A", "base":"C"},
-				{"x":150,"y":63,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"G", "base":"B"},
-				{"x":150,"y":75,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"F", "base":"A"},
-				{"x":150,"y":88,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"E", "base":"G"},
-				{"x":150,"y":100,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"D", "base":"F"},
-				{"x":150,"y":113,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"C", "base":"E"},
-				{"x":150,"y":125,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"B", "base":"D"},
-				{"x":150,"y":138,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"A", "base":"C"},
-				{"x":150,"y":150,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"G", "base":"B"},
-				{"x":150,"y":163,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"F", "base":"A"},
-				{"x":150,"y":175,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"E", "base":"G"},
-				{"x":150,"y":188,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"D", "base":"F"},
-				{"x":150,"y":200,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"C", "base":"E"},
-				{"x":150,"y":213,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"B", "base":"D"},
-				{"x":150,"y":225,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"A", "base":"C"},
-				{"x":150,"y":238,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"G", "base":"B"}
+				{"x":150,"y":13,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"D", "bass":"F"},
+				{"x":150,"y":25,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"C", "bass":"E"},
+				{"x":150,"y":38,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"B", "bass":"D"},
+				{"x":150,"y":50,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"A", "bass":"C"},
+				{"x":150,"y":63,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"G", "bass":"B"},
+				{"x":150,"y":75,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"F", "bass":"A"},
+				{"x":150,"y":88,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"E", "bass":"G"},
+				{"x":150,"y":100,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"D", "bass":"F"},
+				{"x":150,"y":113,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"C", "bass":"E"},
+				{"x":150,"y":125,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"B", "bass":"D"},
+				{"x":150,"y":138,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"A", "bass":"C"},
+				{"x":150,"y":150,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"G", "bass":"B"},
+				{"x":150,"y":163,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"F", "bass":"A"},
+				{"x":150,"y":175,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"E", "bass":"G"},
+				{"x":150,"y":188,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"D", "bass":"F"},
+				{"x":150,"y":200,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"C", "bass":"E"},
+				{"x":150,"y":213,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"B", "bass":"D"},
+				{"x":150,"y":225,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"A", "bass":"C"},
+				{"x":150,"y":238,"r":15,"sA":0,"eA":constPI,"acw":false,"treble":"G", "bass":"B"}
 			];
 
 			//draw a random note
@@ -78,6 +79,9 @@
 			clef = clefs[(Math.floor(Math.random() * clefs.length))];
 			var clefDOM = document.getElementById(clef.name);
 			ctx.drawImage(clefDOM, clef.x, clef.y, clef.width, clef.height);
+
+			ctx.font = "bold 30px sans-serif";
+			ctx.fillText(note[clef.name], 10, 275);
 
 
 			/* this is only for mouse interaction */
