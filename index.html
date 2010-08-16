@@ -80,21 +80,15 @@
 			var clefDOM = document.getElementById(clef.name);
 			ctx.drawImage(clefDOM, clef.x, clef.y, clef.width, clef.height);
 
-			ctx.font = "bold 30px sans-serif";
-			ctx.fillText(note[clef.name], 10, 275);
-
-
 			/* this is only for mouse interaction */
 			var down = false;
-			ctx.canvas.addEventListener('mousedown', function() { down = true; }, false);
-			ctx.canvas.addEventListener('mouseup', function() { down = false; }, false);
-			ctx.canvas.addEventListener('mousemove', function(event) {
-				if (down) {
-					ctx.translate(0,-50);
-					ctx.drawImage(img_buffer, event.clientX - this.offsetLeft,
-					event.clientY - this.offsetTop,100,100);
-					ctx.translate(0,50);
-				}
+			ctx.canvas.addEventListener('mousedown', function() {
+				//Draw the note letter associated with randomly chosen note
+				ctx.font = "bold 30px sans-serif";
+				ctx.fillText(note[clef.name], 10, 275);
+			}, false);
+			ctx.canvas.addEventListener('mouseup', function() {
+
 			}, false);
 		</script>
 
