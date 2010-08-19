@@ -76,6 +76,7 @@
 					"sA":0,/*idk what sA stands for...*/
 					"eA":Math.PI * 2,/*idk what eA stands for...*/
 					"acw":false,/*idk what acw stands for...*/
+					"color":"#000",
 					list:[
 						{"steps":1,"treble":"D", "bass":"F"},
 						{"steps":2,"treble":"C", "bass":"E"},
@@ -98,44 +99,60 @@
 						{"steps":19,"treble":"G", "bass":"B"}
 					]
 				},
+				noteLetter:{
+					color:"#000",
+					font:"bold 30px sans-serif",
+					x:10,/*text x,y represents bottom left, NOT top left*/
+					y:275,
+					backgroundSquare:{
+						x:5,
+						y:245,
+						width:35,
+						height:35
+					}
+				},
+				clefs : [
+					{"name": "treble","x": 10,"y": 50,"width": 50,"height": 175},
+					{"name": "bass","x": 10,"y": 75,"width": 60,"height": 87}
+				],
 				/*redraw the notes. This needs a lot of clean up and abstraction still*/
 				refreshNotes: function(){
-					var ctx, notes;
-					ctx = flashCards.canvas.dom;
+					var cvs, notes, note, clef, clefDOM;
+					cvs = flashCards.canvas.dom;
 					notes = flashCards.notes;
 					
 					//start a new path to make the notes with
-					ctx.beginPath();
+					cvs.beginPath();
 	
 					//draw a random note
-					var note = notes.list[(Math.floor(Math.random() * notes.list.length))];
-					ctx.arc(notes.x, (notes.spacing * note.steps), notes.radius, notes.sA, notes.eA, notes.acw);
-					ctx.closePath();
-					ctx.strokeStyle = "#000";
-					ctx.stroke();
-					ctx.fillStyle = "#000";
-					ctx.fill();
+					note = notes.list[(Math.floor(Math.random() * notes.list.length))];
+					cvs.arc(notes.x, (notes.spacing * note.steps), notes.radius, notes.sA, notes.eA, notes.acw);
+					cvs.closePath();
+					cvs.strokeStyle = notes.color;
+					cvs.stroke();
+					cvs.fillStyle = notes.color;
+					cvs.fill();
 	
-					//generate the clefs
-					var clefs = [
-						{"name": "treble","x": 10,"y": 50,"width": 50,"height": 175},
-						{"name": "bass","x": 10,"y": 75,"width": 60,"height": 87}
-					]
+
 	
 					//draw one random clef
-					clef = clefs[(Math.floor(Math.random() * clefs.length))];
-					var clefDOM = document.getElementById(clef.name);
-					ctx.drawImage(clefDOM, clef.x, clef.y, clef.width, clef.height);
+					clef = flashCards.clefs[(Math.floor(Math.random() * flashCards.clefs.length))];
+					clefDOM = document.getElementById(clef.name);
+					cvs.drawImage(clefDOM, clef.x, clef.y, clef.width, clef.height);
 	
-					ctx.canvas.addEventListener('mousedown', function() {
+					cvs.canvas.addEventListener('mousedown', function() {
+						var letter, bg;
+						letter = flashCards.noteLetter;
+						bg = letter.backgroundSquare;
+						
 						//Draw the note letter associated with randomly chosen note
-						ctx.fillStyle = '#EEEEEE';
-						ctx.fillRect(5,245,35,35);
-						ctx.font = "bold 30px sans-serif";
-						ctx.fillStyle = '#000000';
-						ctx.fillText(note[clef.name], 10, 275);
+						cvs.fillStyle = flashCards.canvas.color;
+						cvs.fillRect(bg.x,bg.y,bg.width,bg.height);
+						cvs.font = letter.font;
+						cvs.fillStyle = letter.color;
+						cvs.fillText(note[clef.name], letter.x, letter.y);
 					}, false);
-					ctx.canvas.addEventListener('mouseup', function() {
+					cvs.canvas.addEventListener('mouseup', function() {
 	
 					}, false);					
 				},
