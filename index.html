@@ -10,6 +10,8 @@
 			<img id="bass" src="bass_clef_xxl.png" />
 		</canvas><br />
 		<button onclick="flashCards.refresh();" value="refresh">refresh</button>
+		<button onclick="flashCards.refresh(true);" value="refresh" disabled="disabled" id="correctButton">correct</button>
+		<button onclick="flashCards.refresh(false);" value="refresh" disabled="disabled" id="incorrectButton">incorrect</button>
 		<script>
 			window.flashCards = {
 				canvas:{
@@ -33,7 +35,10 @@
 					spacing:25,
 					color:"#333"
 				},
-				
+				currentNote:{
+					noteNumber:null,
+					clef:null					
+				},
 				init: function(){
 					flashCards.canvas.dom = document.getElementById('paint_area').getContext('2d');
 					flashCards.refresh();
@@ -66,7 +71,10 @@
 					cvs.strokeStyle = staff.color;
 					cvs.stroke();
 					cvs.closePath();
-					
+				
+					document.getElementById("correctButton").disabled = "disabled";
+					document.getElementById("incorrectButton").disabled = "disabled";
+										
 					return cvs;					
 				},
 				/**
@@ -134,7 +142,7 @@
 				],
 				/*redraw the notes. This needs a lot of clean up and abstraction still*/
 				refreshNotes: function(){
-					var cvs, notes, note, clef, clefDOM;
+					var cvs, notes, note, clef, clefDOM, noteNumber, clefName;
 					cvs = flashCards.canvas.dom;
 					notes = flashCards.notes;
 					
@@ -142,7 +150,9 @@
 					cvs.beginPath();
 	
 					//draw a random note
-					note = notes.list[(Math.floor(Math.random() * notes.list.length))];
+					noteNumber = Math.floor(Math.random() * notes.list.length);
+					flashCards.currentNote.noteNumber = noteNumber;
+					note = notes.list[noteNumber];
 					cvs.arc(notes.x, (notes.spacing * note.steps), notes.radius, notes.sA, notes.eA, notes.acw);
 					cvs.closePath();
 					cvs.strokeStyle = notes.color;
@@ -153,10 +163,13 @@
 
 	
 					//draw one random clef
-					clef = flashCards.clefs[(Math.floor(Math.random() * flashCards.clefs.length))];
-					console.log("clefname:" + clef.name);
+					clefName = Math.floor(Math.random() * flashCards.clefs.length);
+					clef = flashCards.clefs[clefName];
+					flashCards.currentNote.clef = clef.name;
 					clefDOM = document.getElementById(clef.name);
 					cvs.drawImage(clefDOM, clef.x, clef.y, clef.width, clef.height);
+	
+
 	
 					cvs.canvas.addEventListener('mousedown', function() {
 						var letter, bg;
@@ -169,14 +182,29 @@
 						cvs.font = letter.font;
 						cvs.fillStyle = letter.color;
 						cvs.fillText(note[clef.name].note, letter.x, letter.y);
+						
+						document.getElementById("correctButton").disabled = false;
+						document.getElementById("incorrectButton").disabled = false;
 					}, false);
 					cvs.canvas.addEventListener('mouseup', function() {
 	
 					}, false);					
 				},
-				refresh:function(){
+				refresh:function(answeredCorrect){
+					/*skip the first time*/
+					if(answeredCorrect !== undefined){
+						flashCards.score(answeredCorrect);
+					}
+					
 					flashCards.resetCanvas();
 					flashCards.refreshNotes();
+				},
+				score:function(answeredCorrect){
+					if(answeredCorrect){
+						flashCards.notes.list[flashCards.currentNote.noteNumber][flashCards.currentNote.clef].answered++;
+					}else{
+						flashCards.notes.list[flashCards.currentNote.noteNumber][flashCards.currentNote.clef].answered = 0;
+					}
 				}
 			};
 			
