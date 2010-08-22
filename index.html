@@ -78,25 +78,25 @@
 					acw:false,/*idk what acw stands for...*/
 					color:"#000",
 					list:[
-						{steps:1, treble:"D", bass:"F"},
-						{steps:2, treble:"C", bass:"E"},
-						{steps:3, treble:"B", bass:"D"},
-						{steps:4, treble:"A", bass:"C"},
-						{steps:5, treble:"G", bass:"B"},
-						{steps:6, treble:"F", bass:"A"},
-						{steps:7, treble:"E", bass:"G"},
-						{steps:8, treble:"D", bass:"F"},
-						{steps:9, treble:"C", bass:"E"},
-						{steps:10, treble:"B", bass:"D"},
-						{steps:11, treble:"A", bass:"C"},
-						{steps:12, treble:"G", bass:"B"},
-						{steps:13, treble:"F", bass:"A"},
-						{steps:14, treble:"E", bass:"G"},
-						{steps:15, treble:"D", bass:"F"},
-						{steps:16, treble:"C", bass:"E"},
-						{steps:17, treble:"B", bass:"D"},
-						{steps:18, treble:"A", bass:"C"},
-						{steps:19, treble:"G", bass:"B"}
+						{steps:1, treble:{note:"D",answered:0}, bass:{note:"F",answered:0}},
+						{steps:2, treble:{note:"C",answered:0}, bass:{note:"E",answered:0}},
+						{steps:3, treble:{note:"B",answered:0}, bass:{note:"D",answered:0}},
+						{steps:4, treble:{note:"A",answered:0}, bass:{note:"C",answered:0}},
+						{steps:5, treble:{note:"G",answered:0}, bass:{note:"B",answered:0}},
+						{steps:6, treble:{note:"F",answered:0}, bass:{note:"A",answered:0}},
+						{steps:7, treble:{note:"E",answered:0}, bass:{note:"G",answered:0}},
+						{steps:8, treble:{note:"D",answered:0}, bass:{note:"F",answered:0}},
+						{steps:9, treble:{note:"C",answered:0}, bass:{note:"E",answered:0}},
+						{steps:10, treble:{note:"B",answered:0}, bass:{note:"D",answered:0}},
+						{steps:11, treble:{note:"A",answered:0}, bass:{note:"C",answered:0}},
+						{steps:12, treble:{note:"G",answered:0}, bass:{note:"B",answered:0}},
+						{steps:13, treble:{note:"F",answered:0}, bass:{note:"A",answered:0}},
+						{steps:14, treble:{note:"E",answered:0}, bass:{note:"G",answered:0}},
+						{steps:15, treble:{note:"D",answered:0}, bass:{note:"F",answered:0}},
+						{steps:16, treble:{note:"C",answered:0}, bass:{note:"E",answered:0}},
+						{steps:17, treble:{note:"B",answered:0}, bass:{note:"D",answered:0}},
+						{steps:18, treble:{note:"A",answered:0}, bass:{note:"C",answered:0}},
+						{steps:19, treble:{note:"G",answered:0}, bass:{note:"B",answered:0}}
 					]
 				},
 				noteLetter:{
@@ -112,8 +112,8 @@
 					}
 				},
 				clefs : [
-					{name:treble, x:10, y:50, width:50, height:175},
-					{name:bass, x:10, y:75, width:60, height:87}
+					{name:"treble", x:10, y:50, width:50, height:175},
+					{name:"bass", x:10, y:75, width:60, height:87}
 				],
 				/*redraw the notes. This needs a lot of clean up and abstraction still*/
 				refreshNotes: function(){
@@ -137,6 +137,7 @@
 	
 					//draw one random clef
 					clef = flashCards.clefs[(Math.floor(Math.random() * flashCards.clefs.length))];
+					console.log("clefname:" + clef.name);
 					clefDOM = document.getElementById(clef.name);
 					cvs.drawImage(clefDOM, clef.x, clef.y, clef.width, clef.height);
 	
@@ -150,7 +151,7 @@
 						cvs.fillRect(bg.x,bg.y,bg.width,bg.height);
 						cvs.font = letter.font;
 						cvs.fillStyle = letter.color;
-						cvs.fillText(note[clef.name], letter.x, letter.y);
+						cvs.fillText(note[clef.name].note, letter.x, letter.y);
 					}, false);
 					cvs.canvas.addEventListener('mouseup', function() {
 	
