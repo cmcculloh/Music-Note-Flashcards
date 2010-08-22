@@ -12,6 +12,8 @@
 		<button onclick="flashCards.refresh();" value="refresh">refresh</button>
 		<button onclick="flashCards.refresh(true);" value="refresh" disabled="disabled" id="correctButton">correct</button>
 		<button onclick="flashCards.refresh(false);" value="refresh" disabled="disabled" id="incorrectButton">incorrect</button>
+		<br />
+		<div id="scores">Score: <span id="currScore">0</span></div>
 		<script>
 			window.flashCards = {
 				canvas:{
@@ -91,8 +93,7 @@
 				 *
 				 * Class: note
 				 * @param steps: multiply by spacing to determine "y" (distance from top)
-				 * @param treble: note - what not this space on treble clef represents, answered - how many times the user has gotten this "right"
-				 * @param bass: note - what not this space on treble clef represents, answered - how many times the user has gotten this "right"
+				 * @param noteByClef: note - what not this space on treble clef represents, answered - how many times the user has gotten this "right". Corresponds with "clefs" table.
 				 */
 				notes:{
 					x:150,
@@ -103,27 +104,31 @@
 					acw:false,/*idk what acw stands for...*/
 					color:"#000",
 					list:[
-						{steps:1, treble:{note:"D",answered:0}, bass:{note:"F",answered:0}},
-						{steps:2, treble:{note:"C",answered:0}, bass:{note:"E",answered:0}},
-						{steps:3, treble:{note:"B",answered:0}, bass:{note:"D",answered:0}},
-						{steps:4, treble:{note:"A",answered:0}, bass:{note:"C",answered:0}},
-						{steps:5, treble:{note:"G",answered:0}, bass:{note:"B",answered:0}},
-						{steps:6, treble:{note:"F",answered:0}, bass:{note:"A",answered:0}},
-						{steps:7, treble:{note:"E",answered:0}, bass:{note:"G",answered:0}},
-						{steps:8, treble:{note:"D",answered:0}, bass:{note:"F",answered:0}},
-						{steps:9, treble:{note:"C",answered:0}, bass:{note:"E",answered:0}},
-						{steps:10, treble:{note:"B",answered:0}, bass:{note:"D",answered:0}},
-						{steps:11, treble:{note:"A",answered:0}, bass:{note:"C",answered:0}},
-						{steps:12, treble:{note:"G",answered:0}, bass:{note:"B",answered:0}},
-						{steps:13, treble:{note:"F",answered:0}, bass:{note:"A",answered:0}},
-						{steps:14, treble:{note:"E",answered:0}, bass:{note:"G",answered:0}},
-						{steps:15, treble:{note:"D",answered:0}, bass:{note:"F",answered:0}},
-						{steps:16, treble:{note:"C",answered:0}, bass:{note:"E",answered:0}},
-						{steps:17, treble:{note:"B",answered:0}, bass:{note:"D",answered:0}},
-						{steps:18, treble:{note:"A",answered:0}, bass:{note:"C",answered:0}},
-						{steps:19, treble:{note:"G",answered:0}, bass:{note:"B",answered:0}}
+						{steps:1, noteByClef:[{note:"D",answered:0}, {note:"F",answered:0}]},
+						{steps:2, noteByClef:[{note:"C",answered:0}, {note:"E",answered:0}]},
+						{steps:3, noteByClef:[{note:"B",answered:0}, {note:"D",answered:0}]},
+						{steps:4, noteByClef:[{note:"A",answered:0}, {note:"C",answered:0}]},
+						{steps:5, noteByClef:[{note:"G",answered:0}, {note:"B",answered:0}]},
+						{steps:6, noteByClef:[{note:"F",answered:0}, {note:"A",answered:0}]},
+						{steps:7, noteByClef:[{note:"E",answered:0}, {note:"G",answered:0}]},
+						{steps:8, noteByClef:[{note:"D",answered:0}, {note:"F",answered:0}]},
+						{steps:9, noteByClef:[{note:"C",answered:0}, {note:"E",answered:0}]},
+						{steps:10, noteByClef:[{note:"B",answered:0}, {note:"D",answered:0}]},
+						{steps:11, noteByClef:[{note:"A",answered:0}, {note:"C",answered:0}]},
+						{steps:12, noteByClef:[{note:"G",answered:0}, {note:"B",answered:0}]},
+						{steps:13, noteByClef:[{note:"F",answered:0}, {note:"A",answered:0}]},
+						{steps:14, noteByClef:[{note:"E",answered:0}, {note:"G",answered:0}]},
+						{steps:15, noteByClef:[{note:"D",answered:0}, {note:"F",answered:0}]},
+						{steps:16, noteByClef:[{note:"C",answered:0}, {note:"E",answered:0}]},
+						{steps:17, noteByClef:[{note:"B",answered:0}, {note:"D",answered:0}]},
+						{steps:18, noteByClef:[{note:"A",answered:0}, {note:"C",answered:0}]},
+						{steps:19, noteByClef:[{note:"G",answered:0}, {note:"B",answered:0}]}
 					]
 				},
+				clefs : [
+					{name:"treble", x:10, y:50, width:50, height:175},
+					{name:"bass", x:10, y:75, width:60, height:87}
+				],
 				noteLetter:{
 					color:"#000",
 					font:"bold 30px sans-serif",
@@ -136,10 +141,6 @@
 						height:35
 					}
 				},
-				clefs : [
-					{name:"treble", x:10, y:50, width:50, height:175},
-					{name:"bass", x:10, y:75, width:60, height:87}
-				],
 				/*redraw the notes. This needs a lot of clean up and abstraction still*/
 				refreshNotes: function(){
 					var cvs, notes, note, clef, clefDOM, noteNumber, clefName;
@@ -163,9 +164,9 @@
 
 	
 					//draw one random clef
-					clefName = Math.floor(Math.random() * flashCards.clefs.length);
-					clef = flashCards.clefs[clefName];
-					flashCards.currentNote.clef = clef.name;
+					clefNumber = Math.floor(Math.random() * flashCards.clefs.length);
+					flashCards.currentNote.clef = clefNumber;
+					clef = flashCards.clefs[clefNumber];
 					clefDOM = document.getElementById(clef.name);
 					cvs.drawImage(clefDOM, clef.x, clef.y, clef.width, clef.height);
 	
@@ -181,7 +182,7 @@
 						cvs.fillRect(bg.x,bg.y,bg.width,bg.height);
 						cvs.font = letter.font;
 						cvs.fillStyle = letter.color;
-						cvs.fillText(note[clef.name].note, letter.x, letter.y);
+						cvs.fillText(note.noteByClef[flashCards.currentNote.clef].note, letter.x, letter.y);
 						
 						document.getElementById("correctButton").disabled = false;
 						document.getElementById("incorrectButton").disabled = false;
@@ -200,11 +201,21 @@
 					flashCards.refreshNotes();
 				},
 				score:function(answeredCorrect){
+					var score = 0;
+					
 					if(answeredCorrect){
-						flashCards.notes.list[flashCards.currentNote.noteNumber][flashCards.currentNote.clef].answered++;
+						flashCards.notes.list[flashCards.currentNote.noteNumber].noteByClef[flashCards.currentNote.clef].answered++;
 					}else{
-						flashCards.notes.list[flashCards.currentNote.noteNumber][flashCards.currentNote.clef].answered = 0;
+						flashCards.notes.list[flashCards.currentNote.noteNumber].noteByClef[flashCards.currentNote.clef].answered = 0;
 					}
+					
+					for(var i = 0, ii = flashCards.notes.list.length; i < ii; i++){
+						for(var nbcN = 0, nbcTN = flashCards.notes.list[i].noteByClef.length; nbcN < nbcTN; nbcN++){
+							score += flashCards.notes.list[i].noteByClef[nbcN].answered;
+						}
+					}
+					
+					document.getElementById("currScore").innerHTML = score;
 				}
 			};
 			
