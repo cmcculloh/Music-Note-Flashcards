@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Place favicon.ico and apple-touch-icon(s) in the root directory -->
+
+		<link rel="stylesheet" href="css/main.min.css">
+	</head>
+	<body>
+		<canvas width="200" height="280" id="paint_area">
+			<img id="treble" src="treble.gif" />
+			<img id="bass" src="bass_clef_xxl.png" />
+		</canvas><br />
+		<input type="button" value="A" class="answer"/>
+		<input type="button" value="B" class="answer"/>
+		<input type="button" value="C" class="answer"/>
+		<input type="button" value="D" class="answer"/>
+		<input type="button" value="E" class="answer"/>
+		<input type="button" value="F" class="answer"/>
+		<input type="button" value="G" class="answer"/>
+		<br />
+		<input type="button" value="pass" class="answer"/>
+		<br />
+		<div id="results"></div>
+		<div id="scores">Score: <span id="currScore">0</span></div>
+
+		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="js/main.js"></script>
+	</body>
+</html>
